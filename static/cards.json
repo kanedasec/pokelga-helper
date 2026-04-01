@@ -1,0 +1,349 @@
+{
+  "item": [
+    {
+      "name": "Choice Band",
+      "type": "battle",
+      "value": 800
+    },
+    {
+      "name": "Dire Hit",
+      "type": "battle",
+      "value": 500
+    },
+    {
+      "name": "Dubious Disc",
+      "type": "battle",
+      "value": 500
+    },
+    {
+      "name": "Lucky Punch",
+      "type": "battle",
+      "value": 800
+    },
+    {
+      "name": "Mega Ring",
+      "type": "battle",
+      "value": 1000
+    },
+    {
+      "name": "Plus Power",
+      "type": "battle",
+      "value": 500
+    },
+    {
+      "name": "Poke Doll",
+      "type": "battle",
+      "value": 500
+    },
+    {
+      "name": "Protein",
+      "type": "battle",
+      "value": 1000
+    },
+    {
+      "name": "Sticky Barb",
+      "type": "battle",
+      "value": 500
+    },
+    {
+      "name": "Bicycle",
+      "type": "field",
+      "value": 0
+    },
+    {
+      "name": "Dowsing Machine",
+      "type": "field",
+      "value": 1000
+    },
+    {
+      "name": "Ether",
+      "type": "field",
+      "value": 800
+    },
+    {
+      "name": "Fame Checker",
+      "type": "field",
+      "value": 1000
+    },
+    {
+      "name": "Gold Bottle Cap",
+      "type": "field",
+      "value": 1000
+    },
+    {
+      "name": "Nugget",
+      "type": "field",
+      "value": 2000
+    },
+    {
+      "name": "Pokedex",
+      "type": "field",
+      "value": 1000
+    },
+    {
+      "name": "Rare Candy",
+      "type": "field",
+      "value": 800
+    },
+    {
+      "name": "Sweet Honey",
+      "type": "field",
+      "value": 800
+    },
+    {
+      "name": "Great Ball",
+      "type": "poke_ball",
+      "value": 500
+    },
+    {
+      "name": "Luxury Ball",
+      "type": "poke_ball",
+      "value": 1000
+    },
+    {
+      "name": "Master Ball",
+      "type": "poke_ball",
+      "value": 0
+    },
+    {
+      "name": "Quick Ball",
+      "type": "poke_ball",
+      "value": 800
+    },
+    {
+      "name": "Timer Ball",
+      "type": "poke_ball",
+      "value": 800
+    },
+    {
+      "name": "Ultra Ball",
+      "type": "poke_ball",
+      "value": 800
+    }
+  ],
+  "event": [
+    "Blaine's Quiz!",
+    "Brock's Grit!",
+    "Meet Bruno!",
+    "Find a Cave!",
+    "Erika's Hospitality!",
+    "Meet a Fisherman!",
+    "Get Spooked!",
+    "Meet Kahili!",
+    "Mankey's Mischief!",
+    "Meet Mina!",
+    "A Favour for Misty!",
+    "Meet the Name Rater?",
+    "Meet a Ninja Boy!",
+    "Meet a Poke Kid!",
+    "Meet a Poke Maniac!",
+    "Meet Professor Oak's Aide!",
+    "Meet a Psychic!",
+    "Road Block!",
+    "Meet a Salesman!",
+    "Special Delivery!",
+    "Meet some Teammates!",
+    "Meet a Technician!",
+    "The Chosen One",
+    "Meet some Coach Trainers!",
+    "Meet some Pokemon Breeders!",
+    "Meet a Pokemon Collector!",
+    "Meet some Pokemon Rangers!"
+  ],
+  "pokemon": {
+    "green": [
+      "Abra",
+      "Bellsprout",
+      "Bulbasaur",
+      "Caterpie",
+      "Charmander",
+      "Clefairy",
+      "Cubone",
+      "Diglett",
+      "Ditto",
+      "Doduo",
+      "Dratini",
+      "Drowzee",
+      "Eevee",
+      "Ekans",
+      "Exeggcute",
+      "Farfetch'd",
+      "Gastly",
+      "Geodude",
+      "Goldeen",
+      "Grimer",
+      "Growlithe",
+      "Horsea",
+      "Jigglypuff",
+      "Kabuto",
+      "Koffing",
+      "Krabby",
+      "Machop",
+      "Magikarp",
+      "Magnemite",
+      "Mankey",
+      "Meowth",
+      "Nidoran♀",
+      "Nidoran♂",
+      "Oddish",
+      "Omanyte",
+      "Onix",
+      "Paras",
+      "Pidgey",
+      "Pikachu",
+      "Poliwag",
+      "Ponyta",
+      "Porygon",
+      "Psyduck",
+      "Rattata",
+      "Sandshrew",
+      "Seel",
+      "Shellder",
+      "Slowpoke",
+      "Spearow",
+      "Squirtle",
+      "Staryu",
+      "Tangela",
+      "Tentacool",
+      "Venonat",
+      "Voltorb",
+      "Vulpix",
+      "Weedle",
+      "Zubat"
+    ],
+    "blue": [
+      "Arbok",
+      "Charmeleon",
+      "Dodrio",
+      "Dragonair",
+      "Dugtrio",
+      "Electabuzz",
+      "Electrode",
+      "Fearow",
+      "Flareon",
+      "Gloom",
+      "Golbat",
+      "Golduck",
+      "Graveler",
+      "Haunter",
+      "Hitmonchan",
+      "Hitmonlee",
+      "Hypno",
+      "Ivysaur",
+      "Jolteon",
+      "Jynx",
+      "Kabutops",
+      "Kadabra",
+      "Kakuna",
+      "Kingler",
+      "Lickitung",
+      "Machoke",
+      "Magmar",
+      "Magneton",
+      "Marowak",
+      "Metapod",
+      "Mr. Mime",
+      "Muk",
+      "Nidorina",
+      "Nidorino",
+      "Omastar",
+      "Parasect",
+      "Persian",
+      "Pidgeotto",
+      "Pinsir",
+      "Poliwhirl",
+      "Primeape",
+      "Raticate",
+      "Rhyhorn",
+      "Sandslash",
+      "Scyther",
+      "Seadra",
+      "Seaking",
+      "Starmie",
+      "Tentacruel",
+      "Vaporeon",
+      "Venomoth",
+      "Wartortle",
+      "Weepinbell",
+      "Weezing"
+    ],
+    "red": [
+      "Aerodactyl",
+      "Alakazam",
+      "Arcanine",
+      "Beedrill",
+      "Blastoise",
+      "Butterfree",
+      "Chansey",
+      "Charizard",
+      "Clefable",
+      "Cloyster",
+      "Dewgong",
+      "Dragonite",
+      "Exeggutor",
+      "Gengar",
+      "Golem",
+      "Gyarados",
+      "Kangaskhan",
+      "Lapras",
+      "Machamp",
+      "Nidoking",
+      "Nidoqueen",
+      "Ninetales",
+      "Pidgeot",
+      "Poliwrath",
+      "Raichu",
+      "Rapidash",
+      "Rhydon",
+      "Slowbro",
+      "Snorlax",
+      "Tauros",
+      "Venusaur",
+      "Victreebel",
+      "Vileplume",
+      "Wigglytuff"
+    ],
+    "mega": [
+      "Mega Aerodactyl",
+      "Mega Alakazam",
+      "Mega Beedrill",
+      "Mega Blastoise",
+      "Mega Charizard X",
+      "Mega Charizard Y",
+      "Mega Gengar",
+      "Mega Gyarados",
+      "Mega Kangaskhan",
+      "Mega Mewtwo X",
+      "Mega Mewtwo Y",
+      "Mega Pidgeot",
+      "Mega Pinsir",
+      "Mega Slowbro",
+      "Mega Venusaur"
+    ],
+    "legendary": [
+      "Articuno",
+      "Mew",
+      "Mewtwo",
+      "Moltres",
+      "Zapdos"
+    ]
+  },
+  "title": [
+    "Ace Trainer",
+    "Battle Expert",
+    "Bird Keeper",
+    "Blacksmith",
+    "Fossil Researcher",
+    "Gardener",
+    "Landscaper",
+    "Poke Ball Guy",
+    "Pokemon Fan Club",
+    "Rich Boy",
+    "Rising Star",
+    "Rival",
+    "Sightseer",
+    "Swimmer",
+    "TV Reporter",
+    "Youngster"
+  ]
+}

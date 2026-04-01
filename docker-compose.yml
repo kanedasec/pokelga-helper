@@ -1,0 +1,15 @@
+version: "3.9"
+
+services:
+  app:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data:/app/data
+    environment:
+      - SECRET_KEY=dev-secret-key-change-in-production
+      - ADMIN_PASSWORD=Password123
+      - DATABASE_URL=sqlite:////app/data/game.db
+      - ENVIRONMENT=development
+    restart: unless-stopped

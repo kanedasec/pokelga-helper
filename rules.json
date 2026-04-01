@@ -1,0 +1,753 @@
+{
+  "game": {
+    "name": "Pokemon Let's Go Adventure",
+    "version": "3.3",
+
+    "objective": {
+      "summary": "Capture, train, and battle Pokemon whilst travelling around the Kanto region. Challenge the 8 Gym Leaders to earn badges, then challenge the Elite 4 to become the Pokemon Champion.",
+      "game_end_trigger": "The game ends immediately once a player defeats a member of the Elite 4.",
+      "winner": "The player with the highest total of Victory Points after the game ends."
+    },
+
+    "components": {
+      "dice": {
+        "movement_dice": {
+          "sides": 4,
+          "description": "Rolled once per turn by a player to move their player piece. Some actions and Pokemon Abilities also require this dice."
+        },
+        "pokemon_dice": {
+          "abbreviation": "Pkmn dice",
+          "sides": 6,
+          "description": "Used for capturing Pokemon, using Pokemon Abilities, and other actions."
+        },
+        "battle_bonus_dice": {
+          "description": "Used during Gym and Player battles to provide additional AtkPwr to battling Pokemon.",
+          "special_face": {
+            "name": "Critical Hit",
+            "face_value": "+2",
+            "effect": "Add the shown roll (+2) to the Pokemon's AtkPwr, then roll the Battle Bonus dice 1 additional time and add that roll too. If another Critical Hit is rolled, repeat the process."
+          }
+        }
+      },
+
+      "pokemon_cards": {
+        "description": "Represent Pokemon that players may capture, train, and battle.",
+        "decks": {
+          "green": { "strength_tier": 1, "description": "Generally weakest Pokemon." },
+          "blue": { "strength_tier": 2, "description": "Generally stronger than Green." },
+          "red": { "strength_tier": 3, "description": "Usually the strongest Pokemon. Also contains Legendary Pokemon." }
+        },
+        "uniqueness": "There is only 1 copy of each Pokemon card in the game.",
+        "card_fields": {
+          "name": "The name of the Pokemon species.",
+          "evolution": {
+            "description": "Shows what the Pokemon evolves into, which coloured deck that evolution is in, and the number of badges required to evolve.",
+            "badge_requirement_shown_on_card": true
+          },
+          "ability_icons": {
+            "description": "Icons showing special field capabilities the Pokemon grants.",
+            "icons": {
+              "can_use_cut": "Pokemon can cut down and remove Tree Tokens from the board blocking a player's path.",
+              "can_use_strength": "Pokemon can remove heavy Boulder Tokens from the board blocking a player's path.",
+              "can_use_fly": "Pokemon can fly and transport its trainer to Town or City spaces already visited (costs 3 PP, replaces movement roll).",
+              "can_use_surf": "Pokemon can surf and transport its trainer across water routes. Required to move through water routes.",
+              "can_mega_evolve": "Pokemon is capable of Mega Evolution in battle. The Battle Item 'Mega Ring' is also required."
+            }
+          },
+          "attack_power": {
+            "abbreviation": "AtkPwr",
+            "description": "Shows the Pokemon's strength in battle. 'Printed AtkPwr' refers specifically to the number shown on the card."
+          },
+          "ability": {
+            "description": "A unique ability most Pokemon have, used to help the player or hinder opponents.",
+            "restriction": "Abilities can only be used by Pokemon currently on a player's team (not in storage).",
+            "types": {
+              "battle_ability": {
+                "color": "red",
+                "description": "Only used when the Pokemon is taking part in battle. Has no effect outside of battle."
+              },
+              "field_ability": {
+                "color": "green",
+                "description": "May be used at any time during a player's turn when not in battle. Has no effect during battle."
+              },
+              "support_ability": {
+                "color": "blue",
+                "description": "Works like a Battle Ability (only used in battle), but can be used even if this Pokemon is not the one currently battling. Normally only affects the Pokemon that has the ability, unless the text states 'your battling Pokemon', in which case it affects the player's currently battling Pokemon."
+              }
+            },
+            "timing_icons": {
+              "activated": {
+                "icon": "▶ (play button)",
+                "description": "Player manually activates when they wish. Can be used as often as needed as long as requirements are met. In battle, can only be used BEFORE the Battle Bonus dice are rolled, or BEFORE making a capture roll (during a wild encounter)."
+              },
+              "triggered": {
+                "icon": "⚠ (exclamation in box)",
+                "description": "Automatically activates when certain conditions are met. Can activate more than once during a turn or battle."
+              },
+              "continuous": {
+                "icon": "🔄 (circular arrows)",
+                "description": "Always active and in effect wherever possible. No activation needed."
+              }
+            }
+          },
+          "catch_rate": {
+            "description": "Shows how difficult the Pokemon is to catch in the wild. Higher number = harder to catch. A '+' suffix (e.g. '2+') means 2 or higher on the Pkmn dice is needed."
+          },
+          "type": {
+            "description": "Each Pokemon has an elemental type represented by an icon.",
+            "all_types": ["Bug", "Dark", "Dragon", "Electric", "Ghost", "Grass", "Ground", "Fairy", "Fighting", "Fire", "Flying", "Ice", "Normal", "Poison", "Psychic", "Rock", "Steel", "Water"]
+          },
+          "weakness_value": {
+            "description": "If a Pokemon is weak to the type of the opposing Pokemon, it loses AtkPwr equal to this value during battle."
+          }
+        }
+      },
+
+      "legendary_pokemon": {
+        "location": "Red deck, identified by a golden border.",
+        "setup": "3 out of 5 potential Legendary Pokemon are chosen at random and added to the Red deck. The unchosen 2 are not used.",
+        "legendary_rule": {
+          "trigger": "When a Legendary Pokemon is encountered during a wild encounter, before battle may begin.",
+          "procedure": "The battling player must roll the Pkmn dice. On a result of 4 or lower, the Legendary Pokemon is immediately shuffled back into the Red deck and the encounter ends.",
+          "note": "This rule must always be followed when a wild Legendary Pokemon is encountered."
+        },
+        "illegitimate_acquisition": "If a player would ever add a Legendary Pokemon to their collection when they did not capture it or have it traded to them (e.g. as a reward from defeating a Gym Leader), it is immediately shuffled back into the Red deck and that player may take another card from the top of the Red deck instead."
+      },
+
+      "item_cards": {
+        "description": "Represent items a player can obtain on their adventure.",
+        "location": "Found in the Item deck.",
+        "when_obtained": "Kept in player's hand until used. Once played, they are discarded.",
+        "discard_pile": "An Item card discard pile forms during play. Players may examine it at any time.",
+        "deck_reshuffle": "If the Item deck runs out, shuffle the discard pile and place it face down as a new Item deck.",
+        "hand_limit": {
+          "rule": "At the end of a player's turn, if they have more than 4 Item cards in their hand, they must discard until they have exactly 4.",
+          "maximum": 4
+        },
+        "types": {
+          "battle_item": {
+            "color": "red",
+            "description": "Can only be used in battle.",
+            "limit": "A player may play up to 1 Battle Item per battle, and only before the Battle Bonus dice are rolled, or before making a capture roll (during a wild encounter)."
+          },
+          "field_item": {
+            "color": "green",
+            "description": "Any number of these Items can be played at any time during a player's turn as long as they are not currently in battle."
+          },
+          "poke_ball": {
+            "color": "blue",
+            "description": "Used to help capture wild Pokemon. Up to 1 Poke Ball may be played before making a 'capture roll'.",
+            "failed_capture_rule": "If the capture roll fails after playing a Poke Ball, and the player has another Poke Ball in hand, they may play that Poke Ball to make an additional separate Capture Roll with that Poke Ball."
+          }
+        },
+        "value": {
+          "currency": "Pokemon Dollars (₽)",
+          "description": "Items can be sold at Pokemarts in a Town or City. Items with a value of '-' are treated as ₽0.",
+          "payment_rule": "If a player must pay for something, they discard Items from their hand with a combined total value equal to or higher than the required amount."
+        },
+        "rare_items": {
+          "description": "Mostly one-of-a-kind items, separate from the Item deck initially.",
+          "setup": "Shuffled into the Item deck after the initial starting Item cards have been dealt to players.",
+          "identification": "Identified by stars (★) in their name."
+        }
+      },
+
+      "event_cards": {
+        "description": "Represent events a player may come across on their adventure.",
+        "location": "Found in the Event deck.",
+        "warning": "Not all Event cards are beneficial.",
+        "discard_pile": "An Event card discard pile forms during play. Players may examine it at any time.",
+        "deck_reshuffle": "If the Event deck runs out, shuffle the discard pile and place it face down as a new Event deck.",
+        "types": {
+          "discard": {
+            "description": "Read and follow the instructions in the Event Card Text. Discard the Event card immediately afterwards."
+          },
+          "keep": {
+            "description": "The player does not have to use the effect immediately. They may keep the card face up in front of them and use the effect at a later time. After using the effect, the card is then discarded."
+          }
+        },
+        "flavour_text": "The italic text on an Event card. Has no effect on gameplay."
+      },
+
+      "gym_leader_cards": {
+        "description": "Each Gym Leader card has 2 sides: the front shows the Gym Leader and their Gym location on the board; the reverse shows the rewards a player gains from defeating that Gym Leader.",
+        "placement": "Placed reward-side down on top of the Gym Leader's Pokemon card to conceal rewards.",
+        "pokemon_card": {
+          "description": "Each Gym Leader's Pokemon card has 2 sides representing 2 different Pokemon the Gym Leader can potentially use.",
+          "sides": ["ODD", "EVEN"],
+          "selection": "Chosen at random when a Gym Leader is challenged."
+        }
+      },
+
+      "title_cards": {
+        "description": "Represent trainer classes a player may obtain during the game.",
+        "setup": "At the beginning of the game, 4 Title cards are flipped over and revealed from the deck, in addition to the 'Rival' card which is already face up.",
+        "claiming": {
+          "when": "During a player's turn when they are not in battle, if they meet the card's requirements.",
+          "procedure": "Place the Title card face up in front of them, immediately collect the rewards shown at the bottom. Flip the next card from the Title deck to replace the claimed card.",
+          "limit": "A player may only claim 1 Title card during the entire game. If they already have one, they cannot claim another.",
+          "collection_reference": "'Pokemon in your collection' on Title cards refers to each individual Pokemon card obtained, including evolved Pokemon."
+        },
+        "victory_points": "Each Title card awards additional victory points at end of game (shown by ribbon icon on bottom right).",
+        "league_champion_exception": "The 'League Champion' Title card awarded for defeating the Elite 4 can be claimed even if the player already has a Title card."
+      },
+
+      "badge_tokens": {
+        "description": "Awarded to players who defeat a Gym Leader.",
+        "display": "Players display them in their Badge Case.",
+        "end_game_value": "Each badge token awards 5 Victory Points at the end of the game.",
+        "evolution_use": "Badge tokens are required to evolve most Pokemon.",
+        "tradeable": false
+      },
+
+      "level_up_counters": {
+        "description": "Represent a Pokemon's acquired strength through battles.",
+        "placement": "Placed on the Pokemon's card. Value can be increased or decreased on the counter.",
+        "battle_bonus": "+1 AtkPwr in battle per Level Up Counter.",
+        "maximum": 5,
+        "max_exceeded_rule": "If a Pokemon would be awarded a Level Up Counter when it already has 5, the player receives 1 PP instead.",
+        "evolution_requirement": "A Pokemon with at least 3 Level Up Counters can evolve if the required badges are also present.",
+        "removal_on_trade_or_storage": "If a Pokemon is traded between players or moved into storage, any Level Up Counters are removed.",
+        "most_common_source": "Pokemon most commonly receive Level Up Counters when they win a battle."
+      },
+
+      "power_points": {
+        "abbreviation": "PP",
+        "description": "Points representing Pokemon energy, used as a resource.",
+        "tracking": "Tracked using the PP Tracker on the player board.",
+        "maximum": 6,
+        "max_exceeded_rule": "Any PP collected when a player already has 6 is wasted.",
+        "ways_to_gain": [
+          "Landing on a 'Draw an Item Card' space: gain 1 PP",
+          "Landing on a 'Draw an Event Card' space: gain 1 PP",
+          "At the end of any battle where a Level Up Counter was NOT awarded to the battling Pokemon: gain 1 PP",
+          "When placing a Map Pin: gain 1 PP",
+          "Using a Pokemon Center on a Town/City space: gain 1 PP"
+        ],
+        "spend_actions": [
+          {
+            "cost_pp": 2,
+            "action": "Level Up",
+            "description": "Award a Level Up Counter to a non-KO'd Green Pokemon on your team."
+          },
+          {
+            "cost_pp": 3,
+            "action": "Level Up (any)",
+            "description": "Award a Level Up Counter to any non-KO'd Pokemon on your team."
+          },
+          {
+            "cost_pp": 3,
+            "action": "Draw Item Card",
+            "description": "Draw 1 Item card and add it to your hand."
+          },
+          {
+            "cost_pp": 3,
+            "action": "Fly",
+            "description": "Instead of making a movement roll, move your player piece to a Town/City space where you have already placed a Map Pin. Requires a non-KO'd Pokemon on your team that 'Can Use Fly'."
+          }
+        ],
+        "when_to_spend": "During a player's turn, when not in battle."
+      },
+
+      "active_pokemon_token": {
+        "description": "Denotes which Pokemon on a player's team will be sent into battle whenever a battle occurs.",
+        "change_rule": "A player may move their token and change their Active Pokemon at any time and any number of times during their turn, but only outside of battle."
+      },
+
+      "pokemon_storage_pc": {
+        "description": "Stores extra Pokemon beyond the team limit.",
+        "team_maximum": 6,
+        "overflow_rule": "Any additional Pokemon obtained beyond 6 on the team are automatically sent to the Pokemon Storage PC.",
+        "access_restriction": "Players may only access their Storage PC to switch Pokemon when on Town/City spaces.",
+        "storage_limitations": "Pokemon in storage cannot use their Abilities or Ability Icons.",
+        "location_on_board": "Found at the top left of each player's Player Board."
+      },
+
+      "ko_tokens": {
+        "description": "Received whenever a Pokemon on a player's team becomes KO'd.",
+        "maximum": 4,
+        "miracle_moment": {
+          "trigger": "When a player has 4 KO tokens, they may discard all 4 to perform ONE of the following Miracle Moment actions:",
+          "options": [
+            "Award up to 3 Level Up Counters to a single non-KO'd Pokemon on their team.",
+            "Evolve a non-KO'd Pokemon on their team ignoring any badge requirements (3 Level Up Counters must still be removed).",
+            "Look at the top 5 cards of the Item deck. Choose 2 of them to draw, shuffle unchosen cards back into the Item deck."
+          ]
+        }
+      },
+
+      "map_pins": {
+        "description": "Located to the left of each Town/City space. Show that a player has visited that Town/City.",
+        "placement": "Whenever a player lands on or passes through a Town/City space, they may flip the Map Pin of matching colour over.",
+        "pp_reward": "Placing a Map Pin for the first time earns 1 PP.",
+        "fly_use": "Fly can only be used to travel to Town/City spaces where the player has placed a Map Pin."
+      },
+
+      "tree_tokens": {
+        "description": "Block certain paths on the board.",
+        "removal": "Only removed by a player whose team has a Pokemon that 'Can Use Cut'.",
+        "procedure": "When moving onto a Tree space, remove the token, end movement, act on the space underneath.",
+        "kept_by_player": true,
+        "end_game_value_vp": 2
+      },
+
+      "boulder_tokens": {
+        "description": "Block certain paths on the board.",
+        "removal": "Only removed by a player whose team has a Pokemon that 'Can Use Strength'.",
+        "procedure": "When moving onto a Boulder space, remove the token, end movement, act on the space underneath.",
+        "kept_by_player": true,
+        "end_game_value_vp": 2
+      }
+    },
+
+    "setup": {
+      "steps": [
+        "1. Each player chooses a colour (is 'seated').",
+        "2. Click the set-up option for the number of players. The following happen automatically: each player is dealt a 'Starter Pokemon' Poke Ball; the Item deck is shuffled and each player is dealt 2 Item cards; 3 Legendary Pokemon (out of 5) are randomly added to the Red Deck; Rare Items are added to the Item deck; all decks are shuffled; 4 Title cards are flipped and revealed.",
+        "3. Each player selects a Player Piece and places it on the Pallet Town space. Each player starts with 1 PP.",
+        "4. Each player removes their Green Pokemon from their 'Starter Pokemon' Poke Ball and places it face up on their team board.",
+        "5. Each player rolls the Pkmn dice. Whoever rolls highest takes the first turn (tied players re-roll). Or, players may mutually agree on who goes first."
+      ]
+    },
+
+    "gameplay": {
+      "player_turns": {
+        "description": "On their turn, a player may make a 'movement roll' by rolling the Movement dice (not necessarily at the start of the turn). They then choose a direction and move their player piece exactly that many spaces (cannot change direction while moving). The player then activates the space they landed on.",
+        "town_city_passing": "If a player passes through a Town/City space, they may choose to end their movement there without needing to use their exact roll.",
+        "during_turn_actions": [
+          "Use any Field Abilities of non-KO'd Pokemon on their team (before or after movement roll)",
+          "Play any number of Field Item cards from their hand (before or after movement roll)",
+          "Spend PP for special actions (before or after movement roll)",
+          "Change their 'Active Pokemon' by moving their Active Pokemon Token to a different slot (before or after movement roll)"
+        ],
+        "turn_order": "Once a player ends their turn, it is the turn of the player to their left."
+      }
+    },
+
+    "board_spaces": {
+      "wild_encounters": {
+        "trigger": "Landing on a 'Wild Encounter!' space or being instructed to have a Wild Encounter.",
+        "procedure": [
+          "1. Flip over and reveal the top card of the specified Pokemon deck (matching colour). A battle now begins! The player's Active Pokemon battles the wild Pokemon.",
+          "2. The player may perform any of the following (before the comparison of AtkPwr): play up to 1 Battle Item; use any number of 'Activated' (▶) Battle Abilities their battling Pokemon may have; use any number of 'Activated' (▶) Support Abilities of non-KO'd Pokemon on their team. NOTE: Wild Pokemon's Battle/Support Abilities are ignored. 'Activated' (▶) Abilities can only be used BEFORE making a capture roll. 'Triggered' (⚠) Battle/Support Abilities activate when conditions are met at any point. 'Continuous' (🔄) Abilities are always in effect.",
+          "3. Apply weaknesses. If either Pokemon is 'Weak To' the type of the opposing Pokemon, it loses AtkPwr equal to its weakness value.",
+          "4. Compare the player's battling Pokemon's AtkPwr total with the wild Pokemon's AtkPwr total."
+        ],
+        "battle_bonus_dice_note": "Battle Bonus dice are NOT rolled during wild encounter battles. They are only rolled during Gym and Player battles.",
+        "outcomes": {
+          "player_wins": {
+            "condition": "Player's Pokemon's AtkPwr total is equal to or higher than the wild Pokemon's.",
+            "result": "Player's Pokemon wins the battle. Their Pokemon is awarded a Level Up Counter (or 1 PP if already at 5 Level Up Counters). Player may then attempt to catch the Pokemon."
+          },
+          "wild_wins": {
+            "condition": "Wild Pokemon's AtkPwr total is higher than the player's Pokemon's.",
+            "result": "Wild Pokemon wins. Player's battling Pokemon is now KO'd (flipped face down). Player receives 1 PP and 1 KO Token. Shuffle the wild Pokemon back into its respective deck."
+          }
+        },
+        "running_away": {
+          "condition": "Player's battling Pokemon's AtkPwr is lower than the opposing Pokemon's, before the battle result is determined.",
+          "procedure": "Player may make an 'Escape Roll' by rolling the Pkmn dice.",
+          "success": "On a 5 or higher: player successfully escapes, battle ends.",
+          "failure": "On 4 or lower: fail to escape, Pokemon is KO'd.",
+          "reward": "Either way, player still receives 1 PP. Shuffle the wild Pokemon back into its deck.",
+          "note": "Running away is an alternative to letting the battle resolve normally when the player's Pokemon is at a disadvantage."
+        },
+        "catching_pokemon": {
+          "prerequisite": "Player's Pokemon must have won the battle.",
+          "procedure": [
+            "1. Player performs a 'Capture Roll' by rolling the Pkmn dice. Before this roll, the player may play up to 1 Poke Ball card from their hand to increase chances of success.",
+            "2. If the capture roll total is equal to or higher than the wild Pokemon's Catch Rate (including any bonuses from Poke Ball cards played), the Pokemon is successfully captured and added to the player's collection.",
+            "3. If unsuccessful, the Pokemon is shuffled back into its deck and the battle ends. Exception: If the player used a Poke Ball that failed and has another Poke Ball in hand, they may play it for an additional separate Capture Roll."
+          ]
+        }
+      },
+
+      "draw_item_card_space": {
+        "effect": "Player draws 1 Item card from the top of the Item deck and adds it to their hand. They then receive 1 PP."
+      },
+
+      "draw_event_card_space": {
+        "effect": "Player draws and reveals 1 Event card from the top of the Event deck. They then receive 1 PP.",
+        "discard_event": "If a 'Discard' event is drawn, follow the instructions on the card. The card is then discarded.",
+        "keep_event": "If a 'Keep' event is drawn, the player may keep the card face up in front of them and use its effect at a later time."
+      },
+
+      "town_and_city_spaces": {
+        "passing_through": "A player may choose to end their movement on a Town/City space when passing through it.",
+        "map_pins": "When a player lands on or passes through a Town/City space, they may place a Map Pin on that space (flip their colour's pin over). Placing a Map Pin earns 1 PP.",
+        "actions": {
+          "availability": "Available while player piece is on a Town/City space (except Pallet Town). May be used before or after making a movement roll.",
+          "pokemon_center": {
+            "effect": "Player gets 1 PP. Then, if they have any KO'd Pokemon on their team, those Pokemon are revived (flipped face up). Player receives only 1 PP total regardless of how many Pokemon are revived. A player does not need any KO'd Pokemon to use the Pokemon Center.",
+            "restriction": "If a player uses a Pokemon Center, they cannot battle a Gym Leader during that same turn and/or may not have already battled a Gym Leader during the turn (even if they just got the PP and did not revive any Pokemon)."
+          },
+          "poke_mart": {
+            "frequency": "Once per turn.",
+            "effect": "Player may 'sell' (discard) unwanted Item cards from their hand to obtain new Items.",
+            "exchange_rates": [
+              { "minimum_value_discarded": 1000, "cards_drawn": 1 },
+              { "minimum_value_discarded": 1500, "cards_drawn": 2 }
+            ]
+          },
+          "pokemon_storage": {
+            "effect": "Player accesses their Pokemon Storage PC and may freely move any Pokemon between storage and their team.",
+            "restrictions": [
+              "A player may not move a KO'd Pokemon into storage.",
+              "If a Pokemon with Level Up Counters is moved to storage, those Level Up Counters are removed.",
+              "Players may place Pokemon into storage without replacing it (to create vacant team slots)."
+            ]
+          },
+          "challenge_gym_leader": {
+            "frequency": "Once per turn.",
+            "restrictions": [
+              "Cannot challenge a Gym Leader whose badge the player already has.",
+              "Players do not need to challenge Gym Leaders in any specific order."
+            ],
+            "note": "Gym Leaders do get stronger depending on their position on the board.",
+            "procedure": [
+              "1. Press the 'Challenge' button underneath the respective Gym Leader's card. The Gym Leader's card and one of their 2 Pokemon cards (ODD or EVEN, chosen at random) are moved to the battle arena. Player places their Active Pokemon on the battle arena. A battle begins!",
+              "2. First, check if the Gym Leader's Pokemon has an 'Activated' (▶) Battle Ability. If so, its effect is activated and applied first.",
+              "3. The player may now perform any of the following: play up to 1 Battle Item; use any number of 'Activated' (▶) Battle Abilities their battling Pokemon may have; use any number of 'Activated' (▶) Support Abilities of non-KO'd Pokemon on their team. NOTE: 'Activated' (▶) Abilities can only be used before rolling the Battle Bonus Dice. 'Triggered' (⚠) Battle/Support Abilities activate when conditions are met at any point. 'Continuous' (🔄) Abilities are always in effect.",
+              "4. Weaknesses are applied. If either Pokemon is 'Weak To' the type of the opposing Pokemon, it loses AtkPwr equal to its weakness value.",
+              "5. The Battle Bonus dice are rolled. The challenging player rolls a dice; the player to their left rolls a dice on behalf of the Gym Leader's Pokemon. Both sides add their respective roll to their side's total AtkPwr. Resolve any Critical Hits."
+            ],
+            "outcomes": {
+              "player_loses": {
+                "condition": "Player's AtkPwr total is lower than the Gym Leader's.",
+                "result": "Battling Pokemon is now KO'd (flipped face down). Player receives 1 PP and 1 KO Token. Player returns their KO'd Pokemon to team board. Press 'End Battle' to return Gym Leader and Pokemon to the side of the board."
+              },
+              "tie": {
+                "condition": "Player's AtkPwr total is equal to the Gym Leader's.",
+                "result": "Each side rolls the Battle Bonus dice again, adding results to their current totals (totals are NOT reset). Resolve Critical Hits as normal. Repeat until a winner is determined."
+              },
+              "player_wins": {
+                "condition": "Player's AtkPwr total is higher than the Gym Leader's.",
+                "result": "Player wins! Battling Pokemon is awarded a Level Up Counter (or 1 PP if already at max 5). Press 'View Rewards' to see rewards. Collect designated cards from specified decks. Press 'End Battle' to return Gym Leader and Pokemon."
+              }
+            }
+          }
+        },
+        "special_actions": {
+          "lavender_town_pokemon_tower": {
+            "cost_pp": 3,
+            "frequency": "Once per turn.",
+            "effect": "Look at the top 3 cards of the Event deck. Choose 1 of those cards to draw and reveal. Shuffle any unchosen cards back into the Event Deck."
+          },
+          "celadon_city_department_store": {
+            "cost_pp": 3,
+            "frequency": "Once per turn.",
+            "effect": "Look at the top 4 cards of the Item deck. Choose 1 of those cards to add to your hand. The unchosen cards are shuffled back into the Item deck."
+          },
+          "fuchsia_city_safari_zone": {
+            "cost": "₽500 (discard Item cards from hand with a combined total value of ₽500 or more).",
+            "frequency": "Once per turn.",
+            "procedure": [
+              "1. Pay ₽500 by discarding Items worth ₽500 or more.",
+              "2. Roll the Movement dice.",
+              "3. Reveal top Pokemon card from the deck corresponding to the roll: 1=Green, 2=Blue, 3=Red, 4=Choose any deck.",
+              "4. Immediately attempt to catch the revealed Pokemon by making a capture roll. The revealed Pokemon's Catch Rate is lowered by 2 for this roll.",
+              "5. If capture roll is successful, add Pokemon to collection. Otherwise, shuffle it back."
+            ],
+            "restrictions": [
+              "No battle occurs — no Active Pokemon battles.",
+              "No Level Up Counters are awarded.",
+              "No Abilities or Items may be used.",
+              "No PP is received.",
+              "If a Legendary Pokemon is revealed, it is shuffled back and another card is revealed from the top of that deck instead."
+            ]
+          }
+        },
+        "closed_gyms": {
+          "saffron_city": {
+            "unlocked_by": "Any player defeating Koga, the Gym Leader in Fuchsia City.",
+            "description": "Saffron City Gym is closed until this condition is met."
+          },
+          "viridian_city": {
+            "unlocked_by": "Any player defeating Blaine, the Gym Leader on Cinnabar Island.",
+            "description": "Viridian City Gym is closed until this condition is met."
+          },
+          "unlock_rule": "Once a gym has been opened by any player, the 'Closed Gym' token is removed from the game and the gym is then open to all players."
+        }
+      },
+
+      "water_routes": {
+        "location": "Found between Fuchsia City and Pallet Town, and just north of Lavender Town.",
+        "requirement": "A non-KO'd Pokemon on a player's team must 'Can Use Surf' to move through water routes.",
+        "stranded_rule": "If a player would be in between 2 water routes and has somehow lost their surfing Pokemon, they may continue to move through the water routes until they reach a normal route.",
+        "stranded_on_cinnabar_island": {
+          "condition": "A player finds themselves on Cinnabar Island at the beginning of their turn without any Pokemon in their collection that can Fly or Surf.",
+          "result": "That player may move their Player Piece to the Pallet Town space. Their turn immediately ends and they may not make a movement roll."
+        }
+      },
+
+      "one_way_routes": {
+        "description": "Space connections that can only be moved through in the direction shown on the board.",
+        "rule": "When choosing a direction to move after rolling the Movement dice, a player cannot move through a one-way route if they are moving in the opposite direction to what is shown."
+      },
+
+      "tree_and_boulder_spaces": {
+        "tree_spaces": {
+          "requirement": "A Pokemon on the player's team must 'Can Use Cut'.",
+          "procedure": "When moving onto a Tree space, the player removes the Tree Token, ends their movement, and acts on the space underneath. The removed token is kept by the player."
+        },
+        "boulder_spaces": {
+          "requirement": "A Pokemon on the player's team must 'Can Use Strength'.",
+          "procedure": "When moving onto a Boulder space, the player removes the Boulder Token, ends their movement, and acts on the space underneath. The removed token is kept by the player."
+        },
+        "end_game_value": "Each claimed Tree or Boulder token is worth 2 Victory Points at the end of the game."
+      }
+    },
+
+    "other_rules": {
+      "collection_vs_team": {
+        "in_your_collection": "Refers to every individual Pokemon card a player has obtained. This includes evolved Pokemon AND cards in the PC/storage.",
+        "on_your_team": "Refers to the topmost Pokemon card in each slot of a player's team board. Does NOT include cards underneath evolved Pokemon or cards in the PC/storage."
+      },
+
+      "pokemon_evolution": {
+        "description": "When a Pokemon evolves, it grows and transforms into a different Pokemon.",
+        "requirements": [
+          "Pokemon must be on the player's team.",
+          "Player must not be in battle.",
+          "Pokemon must have at least 3 Level Up Counters.",
+          "Player must have the required number of badges as shown on the card."
+        ],
+        "procedure": [
+          "1. Remove 3 Level Up Counters from the Pokemon.",
+          "2. Search the specified deck for the evolution Pokemon.",
+          "3. If found, place the evolution card on top of the base Pokemon card.",
+          "4. The searched deck is then shuffled.",
+          "5. If not found, the Pokemon does not evolve (the Level Up Counters are still removed)."
+        ],
+        "starter_evolution": "If a player evolves their starter Pokemon, they search their Poke Ball for the evolution card (not the main Pokemon decks).",
+        "stacking_rule": "Evolved Pokemon are stacked on a player's team board so that the previous form's abilities can still be seen underneath.",
+        "battle_rule": "When in battle, an evolved Pokemon only counts its topmost card's stats (AtkPwr, Type, Weaknesses). Previous evolutions' stats are ignored. EXCEPTION: Abilities — an evolved Pokemon may still use the abilities of its previous forms.",
+        "separation_rule": "If a player ever obtains a Pokemon that directly evolves to/from a Pokemon already in their collection (team or storage), they must treat those Pokemon as having evolved. They can no longer be separated (one cannot be moved to a team or traded without its other evolution cards). The Pokemon with the highest printed AtkPwr is always placed on top.",
+        "level_up_counter_on_evolution": "If a Pokemon evolves into a Pokemon with a higher AtkPwr, 3 Level Up Counters are removed from that new Pokemon (if it has fewer than 3, all are removed). No Level Up Counters are removed if a lower-stage evolution is later obtained.",
+        "uniqueness_note": "As there is only 1 copy of each Pokemon card in the game, if a player obtains the evolution of a Pokemon another player has, the other player will only be able to evolve their Pokemon if that player trades the evolution card with them.",
+        "miracle_moment_exception": "A Miracle Moment allows evolution ignoring badge requirements (but 3 Level Up Counters must still be removed)."
+      },
+
+      "mega_evolution": {
+        "description": "A temporary, powerful transformation during battle.",
+        "requirements": [
+          "Pokemon must 'Can Mega Evolve' (has the Mega Evolve ability icon).",
+          "Player must have played the Battle Item 'Mega Ring'.",
+          "Can only be done during battle."
+        ],
+        "procedure": [
+          "1. Search the Mega deck for the respective Mega Pokemon card.",
+          "2. Evolve the battling Pokemon (no Level Up Counters are removed).",
+          "3. Mega Pokemon card is returned to the Mega deck at the end of the battle."
+        ],
+        "stats_rule": "Like normal evolution, previous form stats (AtkPwr, Type, Weaknesses) are ignored. Only the Mega Pokemon's stats are counted in battle. Abilities from all previous forms may still be used.",
+        "atkpwr_bonus": "Unlike normal evolution, Mega Pokemon provides bonus AtkPwr to the Pokemon it evolved from. Add the bonus AtkPwr shown on the Mega Pokemon card to the total AtkPwr of the Pokemon it evolved from (including Level Up Counters)."
+      },
+
+      "kod_pokemon": {
+        "description": "When a Pokemon loses a battle, it becomes KO'd.",
+        "ko_effect": [
+          "The Pokemon is flipped face down.",
+          "Cannot participate in further battles.",
+          "Cannot use Abilities or Ability Icons (Surf, Fly, Cut, Strength).",
+          "Is still treated as being on the player's team.",
+          "Cannot be traded.",
+          "Cannot be moved into storage."
+        ],
+        "revival": "Pokemon Centres in Town/City spaces can be used to revive KO'd Pokemon (flip them face up).",
+        "active_pokemon_ko_rule": "When a player's Active Pokemon becomes KO'd, they must immediately switch their Active Pokemon Token to another non-KO'd Pokemon on their team. They then receive 1 KO Token.",
+        "battle_start_rule": "If a player would begin a battle with their Active Pokemon Token on a KO'd Pokemon, they immediately switch their token to the next non-KO'd Pokemon on their team (to the right of the KO'd Pokemon) and battle with that Pokemon.",
+        "whiting_out": {
+          "condition": "All Pokemon on a player's team are KO'd.",
+          "result": [
+            "The player moves their player piece back to the Pallet Town space.",
+            "All Pokemon on their team are revived.",
+            "The player receives 1 PP for moving to Pallet Town.",
+            "The player's turn immediately ends."
+          ]
+        }
+      },
+
+      "trading": {
+        "timing": "Can be initiated at any point during the game, regardless of board positions. Even during battle, even if it is not currently that player's turn.",
+        "tradeable_items": [
+          "Non-KO'd Pokemon from team or storage",
+          "Item cards",
+          "Keep Event cards",
+          "KO Tokens",
+          "Promised future favours"
+        ],
+        "non_tradeable": ["Badges", "Title cards"],
+        "mutual_agreement": "Both players must agree to the trade.",
+        "free_trade": "A player does not have to give anything in return during a trade (a player may give something to another player for free).",
+        "evolution_rule": "Pokemon evolutions cannot be separated when traded. Any evolved Pokemon must be traded as one Pokemon.",
+        "level_up_counter_rule": "Any Level Up Counters a Pokemon may have are removed when it is traded.",
+        "restrictions": [
+          "A player may not trade a Pokemon that is currently in battle.",
+          "A player may not trade a Pokemon if it is the only Pokemon in their collection."
+        ]
+      },
+
+      "player_battles": {
+        "trigger": "When a player lands on a space also occupied by other players, they may challenge up to 1 of those players to a battle (instead of acting on the space).",
+        "challenged_player_acceptance": {
+          "must_accept": "The challenged player must accept by default.",
+          "may_decline_if": [
+            "They are on a Town/City space.",
+            "They have 0 badges.",
+            "They have fewer badges than the challenging player."
+          ]
+        },
+        "procedure": [
+          "1. Both players may move their Active Pokemon Token to a different Pokemon on their team first (challenging player does this first, then either player may change before placing on arena).",
+          "2. Each player draws 1 Item card from the Item deck (challenging player draws first).",
+          "3. The challenging player may perform any of the following: play up to 1 Battle Item FACE DOWN on the battle arena (effects not yet applied); use any number of 'Activated' (▶) Battle Abilities their battling Pokemon may have; use any number of 'Activated' (▶) Support Abilities of non-KO'd Pokemon on their team.",
+          "4. When the challenging player has finished, the opposing player may perform the same actions (Battle Item also played face down).",
+          "NOTE: 'Activated' (▶) Abilities can only be used before rolling the Battle Bonus Dice. 'Triggered' (⚠) Abilities activate when conditions met. 'Continuous' (🔄) Abilities always in effect.",
+          "5. Any Battle Items that were played are now simultaneously flipped face up and their effects are applied.",
+          "6. Weaknesses are applied. If either Pokemon is 'Weak To' the type of the opposing Pokemon, it loses AtkPwr equal to its weakness value.",
+          "7. Both players roll the Battle Bonus dice simultaneously. Both sides add their roll to their total AtkPwr. Resolve Critical Hits as normal."
+        ],
+        "outcomes": {
+          "lower_atkpwr_loses": {
+            "condition": "The player with the lowest total AtkPwr.",
+            "result": "Battling Pokemon is now KO'd (flipped face down). That player receives 1 PP and 1 KO Token. Return KO'd Pokemon to team board."
+          },
+          "tie": {
+            "condition": "Both sides have equal AtkPwr totals.",
+            "result": "Each side rolls the Battle Bonus dice again, adding results to current totals (totals NOT reset). Resolve Critical Hits. Repeat until a winner is determined."
+          },
+          "higher_atkpwr_wins": {
+            "condition": "The player with the highest total AtkPwr.",
+            "result": "Wins the battle! Battling Pokemon is awarded a Level Up Counter (or 1 PP if already at max 5). The winning player chooses ONE reward from the opposing player: a face-up 'Keep' Event card, OR an Item card from the opposing player's hand (the winner may look at the opponent's hand of Items). If the winner does not wish to take anything, or the opposing player has no Event or Item cards, the winner may draw 1 Item card from the top of the Item deck instead."
+          }
+        }
+      },
+
+      "victory_road_and_pokemon_league": {
+        "victory_road": {
+          "description": "The route to the left of Viridian City, closed to players at the beginning of the game.",
+          "unlocked_by": "Once any player defeats Giovanni (the Gym Leader of Viridian City), the entrance to Victory Road is unlocked for all players."
+        },
+        "indigo_plateau": {
+          "description": "Located at the end of Victory Road. Has all usual Town/City space actions available, plus the ability to challenge the Elite 4.",
+          "challenge_elite_4": {
+            "procedure": [
+              "1. Press the 'Challenge' button under the 'Elite 4' card.",
+              "2. An Elite 4 member (out of the 4) is chosen at random.",
+              "3. One of the 2 chosen member's Pokemon is chosen at random and placed on the battle arena.",
+              "4. The challenging player places their Active Pokemon on the battle arena. A battle begins!",
+              "5. First, check if the Elite 4 Member's Pokemon has an 'Activated' (▶) Battle Ability. If so, its effect is activated and applied first.",
+              "6. The player may now perform any of the following: play up to 1 Battle Item; use any number of 'Activated' (▶) Battle Abilities their battling Pokemon may have; use any number of 'Activated' (▶) Support Abilities of non-KO'd Pokemon on their team. NOTE: 'Activated' (▶) Abilities only before Battle Bonus Dice rolled. 'Triggered' (⚠) activate when conditions met. 'Continuous' (🔄) always in effect.",
+              "7. Weaknesses are applied.",
+              "8. The Battle Bonus dice are rolled. The challenging player rolls; the player to their left rolls on behalf of the Elite 4 Member's Pokemon. Both add their roll to their total AtkPwr. Resolve Critical Hits as normal."
+            ],
+            "outcomes": {
+              "player_loses": {
+                "condition": "Player's AtkPwr total is lower than the Elite 4 Member's.",
+                "result": "Battling Pokemon is KO'd (flipped face down). Player receives 1 PP and 1 KO Token. Return KO'd Pokemon to team board."
+              },
+              "tie": {
+                "condition": "Player's AtkPwr total is equal to the Elite 4 Member's.",
+                "result": "Each side rolls the Battle Bonus dice again, adding results to current totals (not reset). Resolve Critical Hits. Repeat until winner determined."
+              },
+              "player_wins": {
+                "condition": "Player's AtkPwr total is higher than the Elite 4 Member's.",
+                "result": "Player wins! Battling Pokemon is awarded a Level Up Counter. The 'Champion's Trophy' Title card is revealed. The player claims that Title card (they may claim this even if they already have a Title card). THE GAME NOW ENDS IMMEDIATELY."
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "ending_the_game": {
+      "trigger": "A player obtains the 'League Champion' Title card by defeating a member of the Elite 4.",
+      "end_of_game_procedure": [
+        "1. Each player sets aside all Level Up Counters on their Pokemon.",
+        "2. Each player may access their Pokemon Storage PC to swap in stronger Pokemon to their team.",
+        "3. Any KO'd Pokemon on a player's team are flipped face up and revived for scoring purposes."
+      ],
+      "victory_points": {
+        "description": "Each player totals their Victory Points. The player with the most is the winner and is declared the Pokemon Champion.",
+        "sources": [
+          {
+            "source": "Team Pokemon (printed AtkPwr)",
+            "points": "1 Victory Point for each point of printed AtkPwr of each Pokemon on their team.",
+            "notes": "Use the printed AtkPwr on the card, not counting Level Up Counters for this category."
+          },
+          {
+            "source": "Level Up Counters",
+            "points": "1 Victory Point per Level Up Counter (the ones set aside at end of game)."
+          },
+          {
+            "source": "Pokemon in Storage",
+            "points": "1 VP per Green Pokemon in storage, 2 VP per Blue Pokemon in storage, 3 VP per Red Pokemon in storage.",
+            "notes": "AtkPwr of Pokemon in storage is NOT counted."
+          },
+          {
+            "source": "Evolution chains in entire collection",
+            "points": "2 Victory Points for each time an evolution occurred within the player's entire collection. This is counted between Pokemon that directly evolve into one another.",
+            "notes": "E.g. Charmander→Charmeleon→Charizard = 2 evolutions = 4 VP. Includes Pokemon in storage."
+          },
+          {
+            "source": "Badges",
+            "points": "5 Victory Points per badge."
+          },
+          {
+            "source": "Title cards",
+            "points": "A number of points as listed on the Title card (shown by the ribbon icon)."
+          },
+          {
+            "source": "Keep Event cards and Item cards in hand",
+            "points": "1 Victory Point for each."
+          },
+          {
+            "source": "Tree or Boulder tokens claimed",
+            "points": "2 Victory Points for each."
+          }
+        ]
+      },
+      "tie_breaker": "In the event of a tie, all tied players each roll the Pkmn dice and add the result to their Victory Point total. They continue rolling until the tie is broken."
+    },
+
+    "critical_hits": {
+      "description": "A Critical Hit occurs when the Battle Bonus dice shows the white '+2' face.",
+      "procedure": [
+        "Add the shown roll (+2) to the Pokemon's AtkPwr.",
+        "Roll the Battle Bonus dice 1 additional time.",
+        "Add the additional roll to the Pokemon's AtkPwr.",
+        "If another Critical Hit is rolled, repeat the process."
+      ],
+      "applies_to": "Gym Leader battles, Player battles, and Elite 4 battles."
+    },
+
+    "quick_reference": {
+      "pp_maximum": 6,
+      "team_maximum": 6,
+      "level_up_counter_maximum": 5,
+      "ko_token_maximum": 4,
+      "item_hand_limit": 4,
+      "capture_roll_dice": "Pkmn dice (6-sided)",
+      "escape_roll_dice": "Pkmn dice (6-sided)",
+      "escape_roll_success_threshold": 5,
+      "escape_roll_failure_threshold": 4,
+      "legendary_rule_fail_threshold": 4,
+      "movement_dice_sides": 4,
+      "battle_bonus_dice_sides": 6,
+      "level_up_counters_needed_to_evolve": 3,
+      "evolution_counters_removed": 3,
+      "poke_mart_draw_1_item_at": 1000,
+      "poke_mart_draw_2_items_at": 1500,
+      "safari_zone_cost": 500,
+      "safari_zone_catch_rate_reduction": 2,
+      "legendary_setup_count": 3,
+      "legendary_total_pool": 5,
+      "title_cards_revealed_at_start": 5,
+      "starting_pp": 1,
+      "starting_item_cards": 2,
+      "battle_items_per_battle": 1,
+      "poke_balls_per_capture_attempt": 1
+    }
+  }
+}

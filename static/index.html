@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pokemon LGA Helper</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<!-- ── Auth View ──────────────────────────────────────────────────────────── -->
+<div id="view-auth">
+  <div class="auth-card">
+    <h2>⚡ PokeLGA Helper</h2>
+    <p class="sub">Pokemon Let's Go Adventure session tracker</p>
+
+    <div id="auth-error" class="error-msg hidden"></div>
+
+    <!-- Login Form -->
+    <div id="form-login">
+      <div class="form-group">
+        <label>Username</label>
+        <input type="text" id="login-username" placeholder="Your username" autocomplete="username">
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="login-password" placeholder="Your password" autocomplete="current-password">
+      </div>
+      <button class="btn-primary" onclick="App.login()">Login</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── App Shell (hidden until logged in) ─────────────────────────────────── -->
+<div id="view-app" class="hidden">
+  <header>
+    <h1>⚡ <span>PokeLGA</span> Helper</h1>
+    <div id="header-user">
+      <span id="header-badge"></span>
+      <span id="header-username"></span>
+      <button id="btn-logout" onclick="App.logout()">Logout</button>
+    </div>
+  </header>
+
+  <nav>
+    <button class="active" onclick="App.showView('dashboard')" id="nav-dashboard">Dashboard</button>
+    <button onclick="App.showView('board')" id="nav-board">Board</button>
+    <button onclick="App.showView('cards')" id="nav-cards">Cards</button>
+    <button onclick="App.showView('vp')" id="nav-vp">Victory Points</button>
+    <button onclick="App.openPanel()" id="nav-manage" class="hidden" style="margin-left:auto;background:rgba(249,197,26,.15);color:var(--accent);border-color:rgba(249,197,26,.3)">👑 Manage Game</button>
+  </nav>
+
+  <!-- Game banner -->
+  <div style="padding: 12px 20px 0">
+    <div id="game-banner"></div>
+  </div>
+
+  <main>
+    <!-- Dashboard -->
+    <div id="view-dashboard">
+      <div id="refresh-indicator">Last updated: —</div>
+      <div class="player-grid" id="player-grid"></div>
+    </div>
+
+    <!-- VP View -->
+    <div id="view-vp" class="hidden">
+      <div class="vp-table-wrap">
+        <table class="vp-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Player</th>
+              <th>Team AtkPwr</th>
+              <th>LUC</th>
+              <th>Storage</th>
+              <th>Evolutions</th>
+              <th>Badges</th>
+              <th>Title</th>
+              <th>Cards</th>
+              <th>Tokens</th>
+              <th class="vp-total">Total VP</th>
+            </tr>
+          </thead>
+          <tbody id="vp-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <!-- Board View (full-width, outside padded main) -->
+  <div id="view-board" class="hidden">
+    <div class="board-toolbar">
+      <span class="muted small">Ctrl+scroll to zoom &nbsp;·&nbsp; Drag to pan</span>
+      <div style="display:flex;gap:6px">
+        <button class="btn-zoom" onclick="Board.zoom(0.25)">＋</button>
+        <button class="btn-zoom" onclick="Board.zoom(-0.25)">－</button>
+        <button class="btn-zoom" onclick="Board.resetZoom()">Reset</button>
+      </div>
+    </div>
+    <div class="board-scroll" id="board-scroll">
+      <div class="board-inner" id="board-inner">
+        <img src="/board.png" id="board-img" alt="Game Board" draggable="false">
+        <div class="board-overlay" id="board-overlay"></div>
+      </div>
+    </div>
+    <div class="board-legend" id="board-legend"></div>
+  </div>
+
+  <!-- Cards View (full-width) -->
+  <div id="view-cards" class="hidden">
+    <div class="cards-toolbar">
+      <div class="cards-tabs" id="cards-tabs"></div>
+    </div>
+    <div class="cards-viewer" id="cards-viewer">
+      <div class="muted" style="text-align:center;padding:40px">Select a deck above to view cards.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Player Detail Modal ─────────────────────────────────────────────────── -->
+<div id="player-modal-overlay" class="panel-overlay hidden" onclick="App.closePlayerModal()"></div>
+<div id="player-modal" class="player-modal hidden">
+  <div class="player-modal-header" id="pm-header">
+    <div style="display:flex;align-items:center;gap:10px">
+      <span id="pm-dot" class="color-dot" style="width:18px;height:18px"></span>
+      <h2 id="pm-name"></h2>
+      <span id="pm-pos" class="position-tag" style="font-size:11px"></span>
+    </div>
+    <button class="btn-close" onclick="App.closePlayerModal()">×</button>
+  </div>
+  <div class="player-modal-body" id="pm-body"></div>
+</div>
+
+<!-- ── My Board Panel ──────────────────────────────────────────────────────── -->
+<div id="panel-overlay" class="panel-overlay hidden" onclick="App.closePanel()"></div>
+<div id="my-panel" class="panel hidden">
+  <div class="panel-header">
+    <h2>My Board</h2>
+    <button class="btn-close" onclick="App.closePanel()">×</button>
+  </div>
+  <div class="panel-tabs" id="panel-tabs">
+    <button class="active" onclick="App.panelTab('general')"  id="ptab-general">General</button>
+    <button onclick="App.panelTab('pokemon')"  id="ptab-pokemon">Pokemon</button>
+    <button onclick="App.panelTab('badges')"   id="ptab-badges">Badges</button>
+    <button onclick="App.panelTab('items')"    id="ptab-items">Items 🔒</button>
+    <button onclick="App.panelTab('events')"   id="ptab-events">Events</button>
+  </div>
+  <div class="panel-body" id="panel-body"></div>
+</div>
+
+<script src="/app.js"></script>
+</body>
+</html>

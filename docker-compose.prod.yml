@@ -1,0 +1,12 @@
+version: "3.9"
+
+services:
+  app:
+    build: .
+    ports:
+      - "80:8000"
+    volumes:
+      - ./data:/app/data
+    env_file:
+      - .env.prod
+    restart: always
