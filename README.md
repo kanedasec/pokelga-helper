@@ -1,4 +1,4 @@
-# PokeLGA Helper - Let's get them all
+# PokeLGA Helper - Let's get them all!
 
 A session tracker for **Pokemon Let's Go Adventure** — a tabletop board game played with physical cards and dice. Tracks each player's Pokemon team, items, badges, board position, and Victory Points in real time.
 
