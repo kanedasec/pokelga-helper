@@ -2,7 +2,7 @@
 
 A session tracker for **Pokemon Let's Go Adventure** — a tabletop board game played with physical cards and dice. Tracks each player's Pokemon team, items, badges, board position, and Victory Points in real time.
 
-Built for a group of up to 6 players. One admin account manages the game session; players log in to manage their own boards.
+The original game mod was built for 4 players, but i made this app to support a group of up to 6 players. One admin account manages the game session; players log in to manage their own boards.
 
 ---
 
