@@ -1,0 +1,34 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+
+# Environment / secrets — NEVER commit these
+.env
+.env.*
+*.pem
+*.key
+
+# Database — lives on the server, not in git
+data/
+
+# Local dev overrides
+docker-compose.override.yml
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# Documentation
+DEPLOY.md
+
+# Claude Code memory (local only)
+.claude/
