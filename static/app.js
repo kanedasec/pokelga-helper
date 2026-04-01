@@ -1601,23 +1601,26 @@ const Cards = {
     if (tabs.children.length === 0) {
       tabs.innerHTML =
         `<span class="cards-tab-group-label">Decks</span>` +
-        CARD_DECKS.map(d => `
-          <button class="card-tab-btn" onclick="Cards.show('${d.base}', '${d.file}', this)">${d.label}</button>
+        CARD_DECKS.map((d, i) => `
+          <button class="card-tab-btn" onclick="Cards.showDeck(${i}, this)">${d.label}</button>
         `).join('') +
         `<span class="cards-tab-group-label">Rulebook</span>` +
-        RULEBOOK_DOCS.map(d => `
-          <button class="card-tab-btn" onclick="Cards.show('${d.base}', '${d.file}', this)">${d.label}</button>
+        RULEBOOK_DOCS.map((d, i) => `
+          <button class="card-tab-btn" onclick="Cards.showDoc(${i}, this)">${d.label}</button>
         `).join('');
     }
   },
 
-  show(base, file, btn) {
-    this._active = file;
+  showDeck(i, btn) { this._show(CARD_DECKS[i], btn); },
+  showDoc(i, btn)  { this._show(RULEBOOK_DOCS[i], btn); },
+
+  _show(d, btn) {
+    this._active = d.file;
     document.querySelectorAll('.card-tab-btn').forEach(b => b.classList.remove('active'));
     btn?.classList.add('active');
     const viewer = document.getElementById('cards-viewer');
     if (!viewer) return;
-    const url = encodeURI(`${base}/${file}`);
+    const url = encodeURI(`${d.base}/${d.file}`);
     viewer.innerHTML = `<embed src="${url}" type="application/pdf">`;
   },
 };
