@@ -118,11 +118,3 @@ Two GitHub secrets are required: `EC2_HOST` and `EC2_SSH_KEY`.
 
 ---
 
-## Security notes
-
-- Rate limiting on login: 10 attempts/minute per IP
-- All DB queries use SQLAlchemy ORM (no raw SQL with user input)
-- User-supplied content is HTML-escaped before DOM insertion
-- Ownership enforced on all resource endpoints (users can only modify their own data)
-- Admin-only endpoints protected by `get_admin_user` dependency
-- `.env.prod` with secrets lives only on the server, never committed
