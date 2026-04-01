@@ -97,6 +97,10 @@ app.include_router(vp.router,         prefix=api_prefix)
 app.include_router(game_meta.router,  prefix=api_prefix)
 app.include_router(admin.router,      prefix=api_prefix)
 
+# Serve utils (rulebook, reminder cards, etc.)
+utils_dir = os.path.join(os.path.dirname(__file__), "..", "utils")
+app.mount("/utils", StaticFiles(directory=utils_dir), name="utils")
+
 # Serve frontend — must come last
 static_dir = os.path.join(os.path.dirname(__file__), "..", "static")
 app.mount("/", StaticFiles(directory=static_dir, html=True), name="static")

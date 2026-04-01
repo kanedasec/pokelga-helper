@@ -1575,16 +1575,21 @@ const Board = {
 
 /* ── Cards Module ──────────────────────────────────────────────────────────── */
 const CARD_DECKS = [
-  { label: 'Item Deck',       file: 'Item Deck.pdf' },
-  { label: 'Event Deck',      file: 'Event Deck.pdf' },
-  { label: 'Green Deck',      file: 'Green Deck.pdf' },
-  { label: 'Blue Deck',       file: 'Blue Deck.pdf' },
-  { label: 'Red Deck',        file: 'Red Deck.pdf' },
-  { label: 'Mega Deck',       file: 'Mega Deck.pdf' },
-  { label: 'Title Deck',      file: 'Title Deck.pdf' },
-  { label: 'Gym Leaders',     file: 'Gym Leaders.pdf' },
-  { label: 'Elite 4',         file: 'Elite 4.pdf' },
-  { label: 'Legendary',       file: 'Legendary Pokemon.pdf' },
+  { label: 'Item Deck',       file: 'Item Deck.pdf',           base: '/cards' },
+  { label: 'Event Deck',      file: 'Event Deck.pdf',          base: '/cards' },
+  { label: 'Green Deck',      file: 'Green Deck.pdf',          base: '/cards' },
+  { label: 'Blue Deck',       file: 'Blue Deck.pdf',           base: '/cards' },
+  { label: 'Red Deck',        file: 'Red Deck.pdf',            base: '/cards' },
+  { label: 'Mega Deck',       file: 'Mega Deck.pdf',           base: '/cards' },
+  { label: 'Title Deck',      file: 'Title Deck.pdf',          base: '/cards' },
+  { label: 'Gym Leaders',     file: 'Gym Leaders.pdf',         base: '/cards' },
+  { label: 'Elite 4',         file: 'Elite 4.pdf',             base: '/cards' },
+  { label: 'Legendary',       file: 'Legendary Pokemon.pdf',   base: '/cards' },
+];
+
+const RULEBOOK_DOCS = [
+  { label: 'Rulebook v3.3',    file: 'Pok\u00e9mon Let\'s Go Adventure - Rulebook v3.3.pdf', base: '/utils' },
+  { label: 'Reminder Cards',   file: 'Player Reminder Cards.pdf',                             base: '/utils' },
 ];
 
 const Cards = {
@@ -1594,19 +1599,25 @@ const Cards = {
     const tabs = document.getElementById('cards-tabs');
     if (!tabs) return;
     if (tabs.children.length === 0) {
-      tabs.innerHTML = CARD_DECKS.map(d => `
-        <button class="card-tab-btn" onclick="Cards.show('${d.file}', this)">${d.label}</button>
-      `).join('');
+      tabs.innerHTML =
+        `<span class="cards-tab-group-label">Decks</span>` +
+        CARD_DECKS.map(d => `
+          <button class="card-tab-btn" onclick="Cards.show('${d.base}', '${d.file}', this)">${d.label}</button>
+        `).join('') +
+        `<span class="cards-tab-group-label">Rulebook</span>` +
+        RULEBOOK_DOCS.map(d => `
+          <button class="card-tab-btn" onclick="Cards.show('${d.base}', '${d.file}', this)">${d.label}</button>
+        `).join('');
     }
   },
 
-  show(file, btn) {
+  show(base, file, btn) {
     this._active = file;
     document.querySelectorAll('.card-tab-btn').forEach(b => b.classList.remove('active'));
     btn?.classList.add('active');
     const viewer = document.getElementById('cards-viewer');
     if (!viewer) return;
-    const url = encodeURI(`/cards/${file}`);
+    const url = encodeURI(`${base}/${file}`);
     viewer.innerHTML = `<embed src="${url}" type="application/pdf">`;
   },
 };
