@@ -18,7 +18,7 @@ jobs:
           echo "$SSH_KEY" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
           ssh-keyscan -H "$HOST" >> ~/.ssh/known_hosts
-          ssh -i ~/.ssh/deploy_key ec2-user@"$HOST" '
+          ssh -i ~/.ssh/deploy_key ubuntu@"$HOST" '
             set -e
             cd /home/ec2-user/pokelga-helper
             git pull origin main
