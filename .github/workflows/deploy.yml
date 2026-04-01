@@ -20,7 +20,7 @@ jobs:
           ssh-keyscan -H "$HOST" >> ~/.ssh/known_hosts
           ssh -i ~/.ssh/deploy_key ubuntu@"$HOST" '
             set -e
-            cd /home/ec2-user/pokelga-helper
+            cd /home/ubuntu/pokelga-helper
             git pull origin main
             docker compose -f docker-compose.prod.yml up -d --build
           '
