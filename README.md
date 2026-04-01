@@ -43,7 +43,7 @@ API docs at `http://localhost:8000/docs`
 
 Default dev credentials (set in `docker-compose.yml`):
 - Username: `admin`
-- Password: set by `ADMIN_PASSWORD` env var
+- Password: set by `ADMIN_PASSWORD` env var (default is Pasword123)
 
 ---
 
